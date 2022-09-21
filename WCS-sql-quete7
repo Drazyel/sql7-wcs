@@ -1,0 +1,54 @@
+Question 1 : Affiche les prénoms et noms des sorciers qui se sont inscrits comme joueurs entre les années 1995 et 1998 (enrollment_date).
+
+SELECT wizard.firstname,enrollement_date 
+FROM player JOIN team on player.team_id = team.id 
+JOIN wizard ON player.wizard_id = wizard.id
+ WHERE teamname = "Gryffindor" AND DAYOFWEEK(enrollement_date)= 2 
+ ORDER BY enrollement_date;
+
+SELECT firstname, lastname FROM Wizard
+WHERE id in (SELECT wizard_id 
+FROM player
+where enrollement_date between '1995-01-01' and '1998-12-31');
+
+question 2 : Affiche les prénoms et noms des sorciers (wizards) qui se sont inscrits comme joueurs entre les années 1995 et 1998 (enrollment_date) et qui ont pour rôle 'keeper'
+
+
+SELECT firstname, lastname FROM Wizard
+WHERE id in (SELECT wizard_id 
+FROM player
+where enrollement_date between '1995-01-01' and '1998-12-31'
+and  role ='keeper');
+
+Question 3 Affiche les prénoms, noms et rôles des sorciers (wizards) qui se sont inscrits comme joueurs entre les années 1995 et 1998 (enrollment_date) et qui ont pour rôle ‘chaser’
+Indice : tu auras besoin d’une jointure
+
+SELECT firstname, lastname, `role` 
+FROM Wizard join Player on player.wizard_id=wizard.id
+WHERE wizard.id in (SELECT wizard_id 
+FROM player
+where enrollement_date between '1995-01-01' and '1998-12-31'
+and  role ='chaser');
+
+Question 4 : Affiche le nombre de joueurs par rôle et par équipe 
+
+CREATE VIEW test28_players AS ( 
+SELECT teamname, `role`,count(*) as 'count(role)'
+ from player  join team  on team.id=player.team_id
+ group by `teamname`, `role`
+ ORDER by `teamname` ASC);
+
+select * from test28_players;
+
+
+
+question 5 : Affiche, pour l’équipe 'Gryffindor', les nom, prénom et le rôle des joueurs dont le rôle est 'chaser'
+
+CREATE VIEW gryffon2 AS (
+select teamname, wizard.lastname, wizard.firstname, player.role
+from player 
+join team on team.id = player.team_id
+join wizard on player.wizard_id= wizard.id
+where team.teamname = 'Gryffindor'and `role`='chaser');
+
+select * from gryffon2;
